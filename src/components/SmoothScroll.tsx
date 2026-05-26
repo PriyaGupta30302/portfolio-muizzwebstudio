@@ -16,33 +16,22 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
     // Register GSAP ScrollTrigger
     gsap.registerPlugin(ScrollTrigger);
 
-    // Sync Lenis scroll with GSAP Ticker
-    // By disabling Lenis's autoRaf and ticking it via GSAP's ticker,
-    // we run all scroll-driven and timeline animations in a unified RAF loop,
-    // ensuring frame-perfect synchronization without layout lag or jitter.
-    const update = (time: number) => {
-      lenisRef.current?.lenis?.raf(time * 1000);
-    };
-
-    gsap.ticker.add(update);
-
-    // Tell ScrollTrigger to recalculate positions on Lenis scroll events
-    const lenisInstance = lenisRef.current?.lenis;
-    if (lenisInstance) {
-      lenisInstance.on("scroll", ScrollTrigger.update);
+    // Sync ScrollTrigger updates on Lenis scroll events
+    const lenis = lenisRef.current?.lenis;
+    
+    if (lenis) {
+      lenis.on("scroll", ScrollTrigger.update);
     }
 
     return () => {
-      // Clean up ticker and event listeners on unmount
-      gsap.ticker.remove(update);
-      if (lenisInstance) {
-        lenisInstance.off("scroll", ScrollTrigger.update);
+      if (lenis) {
+        lenis.off("scroll", ScrollTrigger.update);
       }
     };
   }, []);
 
   return (
-    <ReactLenis ref={lenisRef} autoRaf={false} root>
+    <ReactLenis ref={lenisRef} root>
       {children}
     </ReactLenis>
   );

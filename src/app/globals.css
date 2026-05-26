@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 @theme inline {
@@ -12,15 +12,227 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom Circle Mouse Cursor styling */
+.cursor-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.custom-cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  background-color: transparent;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.25s ease, height 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.custom-cursor.hovering {
+  width: 70px;
+  height: 70px;
+  background-color: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.8);
+}
+
+.custom-cursor-text {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.custom-cursor.hovering .custom-cursor-text {
+  opacity: 1;
+}
+
+/* Grid Overlay with Falling Raindrops */
+.grid_overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.grid_layout {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  width: 100%;
+  height: 100%;
+  padding: 0 4rem;
+}
+
+@media (max-width: 768px) {
+  .grid_layout {
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0 1.5rem;
+  }
+}
+
+.grid_col {
+  border-right: 1px solid rgba(255, 255, 255, 0.02);
+  height: 100%;
+  position: relative;
+}
+
+.grid_col:last-child {
+  border-right: none;
+}
+
+/* Animated Raindrops Falling Down Grid Lines */
+.grid_raindrop {
+  position: absolute;
+  top: -100px;
+  left: 100%;
+  width: 1.5px;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, rgba(99, 102, 241, 0.25));
+  animation: fall 6s linear infinite;
+  transform: translateX(-50%);
+}
+
+.grid_col:nth-child(1) .grid_raindrop { animation-delay: 0s; animation-duration: 7s; }
+.grid_col:nth-child(3) .grid_raindrop { animation-delay: 2.2s; animation-duration: 5.5s; }
+.grid_col:nth-child(4) .grid_raindrop { animation-delay: 1.1s; animation-duration: 8s; }
+.grid_col:nth-child(5) .grid_raindrop { animation-delay: 3.5s; animation-duration: 6.2s; }
+
+@keyframes fall {
+  0% { top: -100px; }
+  100% { top: 105%; }
+}
+
+/* Seamless Loops for Tech Stack Marquee */
+.marquee_wrapper {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+}
+
+.marquee_track {
+  display: flex;
+  white-space: nowrap;
+  animation: marquee 25s linear infinite;
+}
+
+.marquee_wrapper.is-reverse .marquee_track {
+  animation: marquee-reverse 25s linear infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.33%); }
+}
+
+@keyframes marquee-reverse {
+  0% { transform: translateX(-33.33%); }
+  100% { transform: translateX(0); }
+}
+
+/* WebGL Shader Displacement Card styling */
+.js-shader-wrapper {
+  position: relative;
+  display: inline-block;
+  overflow: visible !important;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.webgl-canvas-wrap {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.shader-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+.shader-img.is-webgl-active {
+  opacity: 0 !important;
+}
+
+/* Custom Scroll Masking and Utilities */
+.line-mask {
+  overflow: hidden;
+  display: block;
+}
+
+.line-child {
+  display: block;
+  will-change: transform;
+}
+
+/* Preloader styling */
+.radial-ring-progress {
+  stroke-dasharray: 283;
+  stroke-dashoffset: 283;
+  transition: stroke-dashoffset 0.1s linear;
+}
+
+/* Accordion FAQs Drawer styling */
+.faq-drawer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
+  opacity: 0;
+}
+
+.faq-drawer.open {
+  max-height: 200px;
+  opacity: 1;
+}
+
+/* Glassmorphism utility card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.015);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* Hide default cursor on desktop */
+@media (min-width: 1024px) {
+  html, body, a, button, select, input {
+    cursor: none !important;
+  }
 }
