@@ -148,9 +148,9 @@ export default function HeroSection() {
       const isMobile = w < 768;
       const isTablet = w >= 768 && w < 1024;
 
-      // Determine card dimensions responsively matching CSS media classes
-      const cardWidth = isMobile ? 150 : isTablet ? 200 : 260;
-      const cardHeight = isMobile ? 75 : isTablet ? 100 : 130;
+      // Determine card dimensions responsively matching CSS media classes (massive sizes matching reference website)
+      const cardWidth = isMobile ? 200 : isTablet ? 320 : 440;
+      const cardHeight = isMobile ? 110 : isTablet ? 160 : 220;
 
       // Define spacing gaps proportional to card width (gap scales dynamically if card size is modified)
       const gapRatio = 0.42; // Gap is exactly 42% of the card width
@@ -173,8 +173,8 @@ export default function HeroSection() {
           ? h * 0.16 
           : h * 0.45;
 
-      // Slowly increment scroll progress for infinite translation
-      progress.current += 0.0012; // Controls scroll speed
+      // Slowly increment scroll progress for infinite translation (extremely smooth and cinematic)
+      progress.current += 0.0008; // Controls scroll speed (reduced for smooth slow scrolling)
 
       cards.forEach((cardNode, idx) => {
         const card = cardNode as HTMLDivElement;
@@ -267,7 +267,7 @@ export default function HeroSection() {
           {images.map((src, idx) => (
             <div
               key={idx}
-              className="carousel-card absolute w-[150px] h-[75px] md:w-[200px] md:h-[100px] lg:w-[260px] lg:h-[130px] rounded-none overflow-hidden border border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.85)] z-10 flex-shrink-0 transition-shadow duration-300"
+              className="carousel-card absolute w-[220px] h-[110px] md:w-[320px] md:h-[160px] lg:w-[440px] lg:h-[220px] rounded-none overflow-hidden border border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.85)] z-10 flex-shrink-0 transition-shadow duration-300"
               style={{
                 left: "0px",
                 top: "0px",
