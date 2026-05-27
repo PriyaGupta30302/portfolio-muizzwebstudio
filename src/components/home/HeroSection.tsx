@@ -5,6 +5,9 @@ import gsap from "gsap";
 
 export default function HeroSection() {
   const [isOn, setIsOn] = useState(false);
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
+  const activeModeIsScroll = isMobileOrTablet ? true : isOn;
+
   const heroRef = useRef<HTMLDivElement>(null);
   const trailContainerRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -128,7 +131,7 @@ export default function HeroSection() {
 
   // 2. Math-Based Circular Arc Carousel Scroll Loop (Active when Toggle is ON)
   useEffect(() => {
-    if (!isOn || !carouselRef.current) {
+    if (!activeModeIsScroll || !carouselRef.current) {
       if (rafId.current) cancelAnimationFrame(rafId.current);
       return;
     }
@@ -142,12 +145,33 @@ export default function HeroSection() {
 
       const w = window.innerWidth;
       const h = window.innerHeight;
+      const isMobile = w < 768;
+      const isTablet = w >= 768 && w < 1024;
 
-      // Arc coordinates parameters
+      // Determine card dimensions responsively matching CSS media classes
+      const cardWidth = isMobile ? 150 : isTablet ? 200 : 260;
+      const cardHeight = isMobile ? 75 : isTablet ? 100 : 130;
+
+      // Define spacing gaps proportional to card width (gap scales dynamically if card size is modified)
+      const gapRatio = 0.42; // Gap is exactly 42% of the card width
+      const gap = cardWidth * gapRatio;
+
+      // Arc coordinates parameters responsively to ensure path runs directly behind the center text on all screens
       const centerX = w / 2;
-      const centerY = h * 0.95; // Position the center of rotation slightly below the viewport
-      const radiusX = w * 0.44; // Horizontal radius of the ellipse arc
-      const radiusY = h * 0.45; // Vertical height of the curved arc
+      const centerY = isMobile 
+        ? h * 0.62 
+        : isTablet 
+          ? h * 0.58 
+          : h * 0.95;
+
+      // Mathematically unified radiusX guarantees the gap scales proportionally with the card size!
+      const radiusX = (cards.length * (cardWidth + gap)) / Math.PI;
+
+      const radiusY = isMobile 
+        ? h * 0.14 
+        : isTablet 
+          ? h * 0.16 
+          : h * 0.45;
 
       // Slowly increment scroll progress for infinite translation
       progress.current += 0.0012; // Controls scroll speed
@@ -167,8 +191,8 @@ export default function HeroSection() {
         const x = centerX + radiusX * Math.cos(angle);
         const y = centerY - radiusY * Math.sin(angle);
 
-        // Keep the cards completely straight (no rotation, always horizontal 0deg) as requested
-        const rotation = 0;
+        // Tilted/rotated cards following the curved arc for a dynamic, high-end feel (matching reference)
+        const rotation = -(angle - Math.PI / 2) * (180 / Math.PI) * 0.16;
 
         // Set scale: smaller at the edges, full scale at the center top
         const scale = 0.5 + Math.sin(angle) * 0.5;
@@ -188,10 +212,17 @@ export default function HeroSection() {
     return () => {
       if (rafId.current) cancelAnimationFrame(rafId.current);
     };
-  }, [isOn]);
+  }, [activeModeIsScroll]);
 
-  // Clean up any timeouts or spawned images on unmount, and trigger text entrance stagger reveal
+  // Clean up timeouts/spawned images, listen to window resize, and trigger text reveal stagger
   useEffect(() => {
+    // Check screen size responsively
+    const checkScreenSize = () => {
+      setIsMobileOrTablet(window.innerWidth < 1024);
+    };
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+
     // Staggered slide-up reveal for premium masked typography
     gsap.fromTo(
       ".hero-line-child",
@@ -207,6 +238,7 @@ export default function HeroSection() {
     );
 
     return () => {
+      window.removeEventListener("resize", checkScreenSize);
       if (spawnTimeoutRef.current) clearTimeout(spawnTimeoutRef.current);
       if (activeImgRef.current) activeImgRef.current.remove();
     };
@@ -218,16 +250,16 @@ export default function HeroSection() {
       onMouseMove={handleMouseMove}
       className="relative isolate w-full h-screen bg-black flex flex-col items-center justify-center overflow-hidden select-none border-b border-zinc-950"
     >
-      {/* Dynamic Trail Spawner Canvas wrapper (Toggle OFF) */}
-      {!isOn && (
+      {/* Dynamic Trail Spawner Canvas wrapper (Toggle OFF on Desktop, disabled on Mobile/Tablet) */}
+      {!activeModeIsScroll && (
         <div
           ref={trailContainerRef}
           className="absolute inset-0 pointer-events-none z-10 w-full h-full"
         />
       )}
 
-      {/* Half-Circle Curved scrolling Carousel (Toggle ON) */}
-      {isOn && (
+      {/* Half-Circle Curved scrolling Carousel (Toggle ON on Desktop, always ON on Mobile/Tablet) */}
+      {activeModeIsScroll && (
         <div
           ref={carouselRef}
           className="absolute inset-0 w-full h-full pointer-events-none z-10"
@@ -235,7 +267,7 @@ export default function HeroSection() {
           {images.map((src, idx) => (
             <div
               key={idx}
-              className="carousel-card absolute w-[180px] h-[90px] md:w-[280px] md:h-[140px] rounded-none overflow-hidden border border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.85)] z-10 flex-shrink-0 transition-shadow duration-300"
+              className="carousel-card absolute w-[150px] h-[75px] md:w-[200px] md:h-[100px] lg:w-[260px] lg:h-[130px] rounded-none overflow-hidden border border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.85)] z-10 flex-shrink-0 transition-shadow duration-300"
               style={{
                 left: "0px",
                 top: "0px",
@@ -287,7 +319,7 @@ export default function HeroSection() {
       <div 
         onMouseEnter={() => { isOverButtonRef.current = true; }}
         onMouseLeave={() => { isOverButtonRef.current = false; }}
-        className="absolute bottom-[18%] z-30 flex flex-col items-center gap-3"
+        className="absolute bottom-[18%] z-30 hidden lg:flex flex-col items-center gap-3"
       >
         <div
           onClick={() => {
