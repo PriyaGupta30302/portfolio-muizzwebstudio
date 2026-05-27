@@ -83,8 +83,8 @@ export default function HeroSection() {
     img.style.position = "absolute";
     img.style.left = `${x}px`;
     img.style.top = `${y}px`;
-    img.style.width = "200px";
-    img.style.height = "150px";
+    img.style.width = "250px";
+    img.style.height = "125px";
     img.style.objectFit = "cover";
     img.style.borderRadius = "0px";
     img.style.border = "1px solid rgba(255, 255, 255, 0.08)";
@@ -190,8 +190,22 @@ export default function HeroSection() {
     };
   }, [isOn]);
 
-  // Clean up any timeouts or spawned images on unmount
+  // Clean up any timeouts or spawned images on unmount, and trigger text entrance stagger reveal
   useEffect(() => {
+    // Staggered slide-up reveal for premium masked typography
+    gsap.fromTo(
+      ".hero-line-child",
+      { y: "110%", opacity: 0 },
+      {
+        y: "0%",
+        opacity: 1,
+        duration: 1.4,
+        stagger: 0.12,
+        ease: "power4.out",
+        delay: 0.35,
+      }
+    );
+
     return () => {
       if (spawnTimeoutRef.current) clearTimeout(spawnTimeoutRef.current);
       if (activeImgRef.current) activeImgRef.current.remove();
@@ -221,7 +235,7 @@ export default function HeroSection() {
           {images.map((src, idx) => (
             <div
               key={idx}
-              className="carousel-card absolute w-[180px] h-[135px] md:w-[260px] md:h-[195px] rounded-none overflow-hidden border border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.85)] z-10 flex-shrink-0 transition-shadow duration-300"
+              className="carousel-card absolute w-[180px] h-[90px] md:w-[280px] md:h-[140px] rounded-none overflow-hidden border border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.85)] z-10 flex-shrink-0 transition-shadow duration-300"
               style={{
                 left: "0px",
                 top: "0px",
@@ -239,14 +253,33 @@ export default function HeroSection() {
       )}
 
       {/* Center Hero Content (No isolating z-index on this wrapper to allow blending with backdrop) */}
-      <div className="flex flex-col items-center text-center max-w-4xl px-6 pointer-events-none">
+      <div className="flex flex-col items-center text-center max-w-6xl px-6 pointer-events-none">
         {/*
           Mix-blend-difference allows the white text to blend dynamically with the project images rendered at z-10 behind it.
           Since the text and images are now in the same stacking context (the isolated parent container), the text automatically 
           reveals the image details inside the letters when they overlap, acting like a premium transparent mask!
         */}
-        <h1 className="pointer-events-none text-center font-bold tracking-tight font-lato relative z-20 select-none text-3xl leading-[42px] sm:text-4xl sm:leading-[52px] md:text-[56px] md:leading-[72.8px] text-white mix-blend-difference cursor-default max-w-5xl">
-          Next-Gen Websites. Immersive, and Fast. I build digital experiences that feel expensive, load instantly, and turn visitors into loyal clients.
+        <h1 className="pointer-events-none text-center font-bold tracking-tight font-lato relative z-20 select-none text-3xl leading-[42px] sm:text-4xl sm:leading-[52px] md:text-[50px] md:leading-[60px] text-white mix-blend-difference cursor-default max-w-5xl">
+          <span className="line-mask relative overflow-hidden block">
+            <span className="hero-line-child py-[0px] block will-change-transform">
+              Next-Gen Websites. Immersive, and
+            </span>
+          </span>
+          <span className="line-mask relative overflow-hidden block">
+            <span className="hero-line-child py-[0px] block will-change-transform">
+              Fast. I build digital experiences that feel
+            </span>
+          </span>
+          <span className="line-mask relative overflow-hidden block">
+            <span className="hero-line-child py-[0px] block will-change-transform">
+              expensive, load instantly, and turn
+            </span>
+          </span>
+          <span className="line-mask relative overflow-hidden block">
+            <span className="hero-line-child py-[0px] block will-change-transform">
+              visitors into loyal clients.
+            </span>
+          </span>
         </h1>
       </div>
 
@@ -265,15 +298,19 @@ export default function HeroSection() {
             }
             setIsOn(!isOn);
           }}
-          className={`w-20 h-10 rounded-full border border-white/80 p-1 flex items-center cursor-pointer transition-colors duration-300 ${
-            isOn ? "bg-white" : "bg-transparent"
+          className={`w-32 h-16 rounded-full border border-white/80 p-1 flex items-center cursor-pointer transition-all duration-300 hover:scale-105 active:scale-95 ${
+            isOn 
+              ? "bg-white border-white shadow-[0_0_35px_rgba(255,255,255,0.45)]" 
+              : "bg-transparent hover:border-white hover:shadow-[0_0_20px_rgba(255,255,255,0.15)]"
           }`}
           data-cursor-text={isOn ? "Trail" : "Marquee"}
         >
           {/* Slider Circular Knob */}
           <div
-            className={`w-8 h-8 rounded-full transition-all duration-300 transform ${
-              isOn ? "translate-x-10 bg-black" : "translate-x-0 bg-white"
+            className={`w-14 h-14 rounded-full transition-all duration-300 transform ${
+              isOn 
+                ? "translate-x-16 bg-black shadow-[0_2px_10px_rgba(0,0,0,0.5)]" 
+                : "translate-x-0 bg-white"
             }`}
           />
         </div>

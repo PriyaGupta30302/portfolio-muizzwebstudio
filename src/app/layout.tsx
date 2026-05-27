@@ -3,7 +3,6 @@ import { Lato } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import ParticlesBackground from "@/components/ParticlesBackground";
-import InteractiveCursor from "@/components/InteractiveCursor";
 import Preloader from "@/components/Preloader";
 
 const lato = Lato({
@@ -31,7 +30,6 @@ export default function RootLayout({
       <body className="flex flex-col bg-[#0a0a0a] text-white overflow-x-hidden">
         <Preloader />
         <ParticlesBackground />
-        <InteractiveCursor />
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
