@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ShaderHoverImage from "@/components/ShaderHoverImage";
+import HeroSection from "@/components/home/HeroSection";
 
 export default function Home() {
   const workContainerRef = useRef<HTMLDivElement>(null);
@@ -66,6 +67,9 @@ export default function Home() {
           WORKS SHOWCASE
         </div>
       </nav>
+
+      {/* Interactive Custom Hero Section */}
+      <HeroSection />
 
       {/* Main Content: Dedicated Selected Creations Showcase */}
       <main id="work" className="relative z-10 py-32 px-6 md:px-16 lg:px-24">

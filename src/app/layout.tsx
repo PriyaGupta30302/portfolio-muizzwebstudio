@@ -1,20 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Lato } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import ParticlesBackground from "@/components/ParticlesBackground";
 import InteractiveCursor from "@/components/InteractiveCursor";
 import Preloader from "@/components/Preloader";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const lato = Lato({
+  variable: "--font-lato",
   subsets: ["latin"],
+  weight: ["300", "400", "700", "900"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Priya | Immersive Frontend Developer & 3D Designer",
@@ -29,7 +26,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      className={`${lato.variable} antialiased`}
     >
       <body className="flex flex-col bg-[#0a0a0a] text-white overflow-x-hidden">
         <Preloader />
