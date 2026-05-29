@@ -174,7 +174,7 @@ export default function HeroSection() {
                     : h * 0.45;
 
             // Slowly increment scroll progress for infinite translation (extremely smooth and cinematic)
-            progress.current += 0.001; // Controls scroll speed (reduced for smooth slow scrolling)
+            progress.current += 0.0006; // Controls scroll speed (reduced for smooth slow scrolling)
 
             cards.forEach((cardNode, idx) => {
                 const card = cardNode as HTMLDivElement;
