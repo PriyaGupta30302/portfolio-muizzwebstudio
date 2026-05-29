@@ -41,6 +41,9 @@ export default function HeroSection() {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
+        // Prevent spawning mouse trail images anywhere near the navbar (collapsed & expanded states including trail image overlap radius)
+        if (y < 160 && x < 630) return;
+
         // Save latest coordinates
         mousePosRef.current = { x, y };
 

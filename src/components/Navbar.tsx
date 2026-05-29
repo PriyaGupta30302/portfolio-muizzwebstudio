@@ -57,6 +57,9 @@ export default function Navbar() {
 
   const navRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
+  const riyaRef = useRef<HTMLDivElement>(null);
+  const spaceRef = useRef<HTMLDivElement>(null);
+  const uptaRef = useRef<HTMLDivElement>(null);
 
   // Check screen size for hover vs tap triggers
   useEffect(() => {
@@ -68,38 +71,86 @@ export default function Navbar() {
     return () => window.removeEventListener("resize", checkViewport);
   }, []);
 
-  // Butter-smooth GSAP layout animation for navbar expansion and collapse
+  // Butter-smooth GSAP layout animation for navbar expansion and name door-slide reveal
   useEffect(() => {
-    if (!navRef.current || !logoRef.current) return;
+    if (!navRef.current || !logoRef.current || !riyaRef.current || !spaceRef.current || !uptaRef.current) return;
 
     if (isOpen) {
-      // Smoothly expand navbar container
+      // Smoothly expand navbar container (compact to fit PG -> Priya Gupta perfectly!)
       gsap.to(navRef.current, {
-        width: isMobile ? "calc(100vw - 48px)" : "490px",
+        width: isMobile ? "calc(100vw - 48px)" : "420px",
         duration: 0.85,
         ease: "power4.out", // Super fluid decelerating curve
         overwrite: "auto",
       });
 
-      // Smoothly expand logo wrapper
+      // Smoothly expand logo container to full name width
       gsap.to(logoRef.current, {
-        width: "128px",
+        width: "90px",
+        duration: 0.85,
+        ease: "power4.out",
+        overwrite: "auto",
+      });
+
+      // Door-slide reveal: expand "riya"
+      gsap.to(riyaRef.current, {
+        width: "32px",
+        duration: 0.85,
+        ease: "power4.out",
+        overwrite: "auto",
+      });
+
+      // Door-slide reveal: expand space between names
+      gsap.to(spaceRef.current, {
+        width: "6px",
+        duration: 0.85,
+        ease: "power4.out",
+        overwrite: "auto",
+      });
+
+      // Door-slide reveal: expand "upta"
+      gsap.to(uptaRef.current, {
+        width: "36px",
         duration: 0.85,
         ease: "power4.out",
         overwrite: "auto",
       });
     } else {
-      // Smoothly collapse navbar container (longer duration for soft return)
+      // Smoothly collapse navbar container (compact for initials "PG")
       gsap.to(navRef.current, {
-        width: "140px",
+        width: "120px",
         duration: 0.75,
         ease: "power3.out", // Elegant soft deceleration
         overwrite: "auto",
       });
 
-      // Smoothly collapse logo wrapper
+      // Smoothly collapse logo container to initials width
       gsap.to(logoRef.current, {
-        width: "48px",
+        width: "26px",
+        duration: 0.75,
+        ease: "power3.out",
+        overwrite: "auto",
+      });
+
+      // Door-slide collapse: shrink "riya"
+      gsap.to(riyaRef.current, {
+        width: "0px",
+        duration: 0.75,
+        ease: "power3.out",
+        overwrite: "auto",
+      });
+
+      // Door-slide collapse: shrink space
+      gsap.to(spaceRef.current, {
+        width: "0px",
+        duration: 0.75,
+        ease: "power3.out",
+        overwrite: "auto",
+      });
+
+      // Door-slide collapse: shrink "upta"
+      gsap.to(uptaRef.current, {
+        width: "0px",
         duration: 0.75,
         ease: "power3.out",
         overwrite: "auto",
@@ -125,40 +176,54 @@ export default function Navbar() {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={handleClick}
-      className="fixed top-6 left-6 md:left-16 z-50 flex items-center justify-between h-[52px] rounded-xl border border-white/10 bg-zinc-950/45 backdrop-blur-md px-4 shadow-[0_10px_30px_rgba(0,0,0,0.6)] cursor-pointer select-none overflow-hidden w-[140px]"
+      className="fixed top-6 left-6 md:left-16 z-[9999] flex items-center justify-between h-[52px] rounded-xl border border-white/10 bg-black px-4 shadow-[0_10px_30px_rgba(0,0,0,0.6)] cursor-pointer select-none overflow-hidden w-[120px]"
     >
-      {/* Left Logo / Title Area (dynamic width prevents squashing/clipping of the hamburger menu in collapsed state) */}
+      {/* Left Logo / Title Area (door-slides initials PG into Priya Gupta) */}
       <div
         ref={logoRef}
-        className="relative flex-shrink-0 h-6 overflow-hidden w-12"
+        className="relative flex-shrink-0 h-6 overflow-hidden w-[26px] flex items-center select-none"
       >
-        {/* Collapsed logo initials (MWS) */}
-        <span
-          className={`absolute left-0 top-0 transition-all duration-500 font-lato font-black tracking-widest text-base text-white ${
-            isOpen ? "opacity-0 -translate-y-2 pointer-events-none" : "opacity-100 translate-y-0"
-          }`}
-        >
-          MWS
-        </span>
+        <div className="font-lato text-sm font-bold tracking-normal text-white flex items-center select-none">
+          {/* First Name component: P + (riya) */}
+          <div className="flex items-center flex-shrink-0">
+            <span className="font-black text-sm tracking-normal">P</span>
+            <div
+              ref={riyaRef}
+              className="overflow-hidden h-6 flex items-center w-0 flex-shrink-0"
+            >
+              <span className="pl-[2px] font-bold text-sm tracking-normal text-white/95">riya</span>
+            </div>
+          </div>
 
-        {/* Expanded logo full title (Muizz Web Studio) */}
-        <span
-          className={`absolute left-0 top-0 transition-all duration-500 font-lato font-bold tracking-wide text-sm text-white whitespace-nowrap ${
-            isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 pointer-events-none"
-          }`}
-        >
-          Muizz Web Studio
-        </span>
+          {/* Spacer component: ( ) */}
+          <div
+            ref={spaceRef}
+            className="overflow-hidden h-6 flex items-center w-0 flex-shrink-0"
+          >
+            <span className="pl-[2px]">&nbsp;</span>
+          </div>
+
+          {/* Last Name component: G + (upta) */}
+          <div className="flex items-center flex-shrink-0">
+            <span className="font-black text-sm tracking-normal">G</span>
+            <div
+              ref={uptaRef}
+              className="overflow-hidden h-6 flex items-center w-0 flex-shrink-0"
+            >
+              <span className="pl-[2px] font-bold text-sm tracking-normal text-white/95">upta</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Right Controls & Navigation */}
       <div className="flex items-center flex-shrink-0">
         {/* Navigation Links Grouped close together with equal beautiful spacing */}
         <div
-          className={`flex items-center gap-2.5 transition-all duration-500 ${
+          className={`flex items-center gap-2.5 transition-all duration-500 absolute right-4 ${
             isOpen
-              ? "opacity-100 translate-x-0 pointer-events-auto"
-              : "opacity-0 translate-x-12 pointer-events-none absolute right-0"
+              ? "opacity-100 translate-x-0 pointer-events-auto delay-200"
+              : "opacity-0 translate-x-28 pointer-events-none delay-0"
           }`}
         >
           <NavItem href="#work" label="Work &rarr;" />
@@ -166,7 +231,7 @@ export default function Navbar() {
           <NavItem href="#contact" label="Contact &rarr;" />
         </div>
 
-        {/* Hamburger Icon / Menu indicator (Beautifully visible next to logo inside collapsed pill) */}
+        {/* Hamburger Icon / Menu indicator (Beautifully visible next to logo initials inside collapsed PG pill) */}
         <div
           className={`flex flex-col gap-1 pr-1 transition-all duration-500 ${
             isOpen ? "opacity-0 -translate-x-8 pointer-events-none absolute" : "opacity-100 translate-x-0"
