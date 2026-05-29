@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ShaderHoverImage from "@/components/ShaderHoverImage";
 import HeroSection from "@/components/home/HeroSection";
+import Navbar from "@/components/Navbar";
 
 export default function Home() {
   const workContainerRef = useRef<HTMLDivElement>(null);
@@ -58,15 +59,8 @@ export default function Home() {
       <div className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-gradient-to-tr from-indigo-600/5 to-violet-600/5 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-fuchsia-600/5 to-pink-600/5 blur-[130px] pointer-events-none" />
 
-      {/* Simplified Clean Header */}
-      <nav className="fixed top-0 left-0 w-full z-40 py-6 px-6 md:px-16 flex justify-between items-center transition-all bg-gradient-to-b from-[#0a0a0a]/90 to-transparent backdrop-blur-[6px]">
-        <div className="font-black text-lg tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-fuchsia-400 select-none">
-          PRIYA.DEV
-        </div>
-        <div className="text-xs font-bold tracking-widest uppercase text-zinc-500 select-none">
-          WORKS SHOWCASE
-        </div>
-      </nav>
+      {/* Interactive Custom Floating Navbar */}
+      <Navbar />
 
       {/* Interactive Custom Hero Section */}
       <HeroSection />
